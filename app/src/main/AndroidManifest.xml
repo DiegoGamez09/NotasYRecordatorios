@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotasYRecordatorios">
         <activity
+            android:name=".UpdateNotesActivity"
+            android:exported="true" />
+        <activity
             android:name=".AgregarNotas"
             android:exported="true" />
         <activity

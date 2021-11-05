@@ -2,11 +2,13 @@ package com.example.notasyrecordatorios;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,8 +37,22 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        int i=position;
         holder.titulo.setText(listaNotas.get(position).getTitulo());
         holder.descripcion.setText(listaNotas.get(position).getDescripcion());
+
+        holder.contenedor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,UpdateNotesActivity.class);
+                intent.putExtra("titulo", listaNotas.get(i).getTitulo());
+                intent.putExtra("descripcion", listaNotas.get(i).getDescripcion());
+                intent.putExtra("id", listaNotas.get(i).getId());
+                Toast.makeText(context, "index: "+i, Toast.LENGTH_SHORT).show();
+                activity.startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -44,7 +60,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
         return listaNotas.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder  {
         TextView titulo, descripcion;
         RelativeLayout contenedor;
         public MyViewHolder(@NonNull View itemView) {
@@ -53,5 +69,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
             descripcion = itemView.findViewById(R.id.description);
             contenedor = itemView.findViewById(R.id.note_layout);
         }
+
+
     }
 }
