@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,18 +15,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
+public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implements Filterable {
 
     Context context;
     Activity activity;
     List<Model> listaNotas;
+    List<Model> nuevaLista;
 
     public Adapter(Context context, Activity activity, List<Model> listaNotas) {
         this.context = context;
         this.activity = activity;
         this.listaNotas = listaNotas;
+        nuevaLista=new ArrayList<>(listaNotas);
     }
 
     @NonNull
@@ -59,6 +65,40 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
     public int getItemCount() {
         return listaNotas.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filtro;
+    }
+
+    private Filter filtro=new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Model> filteredList=new ArrayList<>();
+            if (constraint ==null || constraint.length()==0){
+                filteredList.addAll(nuevaLista);
+            }
+            else{
+                String filtroPadre=constraint.toString().toLowerCase().trim();
+                for (Model item:nuevaLista){
+                    if(item.getTitulo().toLowerCase().contains(filtroPadre)){
+                        filteredList.add(item);
+                    }
+                }
+
+            }
+            FilterResults results=new FilterResults();
+            results.values=filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            listaNotas.clear();
+            listaNotas.addAll((List)results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class MyViewHolder extends RecyclerView.ViewHolder  {
         TextView titulo, descripcion;
