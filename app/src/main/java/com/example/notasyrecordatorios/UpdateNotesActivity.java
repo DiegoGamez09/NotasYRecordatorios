@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class UpdateNotesActivity extends AppCompatActivity {
+public class  UpdateNotesActivity extends AppCompatActivity {
 
     EditText titulo, descripcion;
     Button btnEditar;
