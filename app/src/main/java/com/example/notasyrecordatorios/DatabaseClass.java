@@ -68,4 +68,19 @@ public class     DatabaseClass extends SQLiteOpenHelper {
         String query = "DELETE FROM "+nombreTabla;
         db.execSQL(query);
     }
+
+    void ActualizarNota(String titulo, String descripcion, String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(columnTitulo,titulo);
+        cv.put(columnDescripcion,descripcion);
+
+        long res= db.update(nombreTabla, cv,"id=?",new String[]{id});
+        if (res==-1){
+            Toast.makeText(context, "No se ha actualizado correctamente", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Elemento actualizado", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }
