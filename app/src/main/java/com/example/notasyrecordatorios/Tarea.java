@@ -1,14 +1,16 @@
 package com.example.notasyrecordatorios;
 
-public class  Model {
+public class Tarea {
     String titulo;
     String descripcion;
     String id;
+    String fecha;
 
-    public Model(String id, String titulo, String descripcion) {
+    public Tarea(String titulo, String descripcion, String id, String fecha) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.id = id;
+        this.fecha = fecha;
     }
 
     public String getTitulo() {
@@ -33,5 +35,13 @@ public class  Model {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }

@@ -28,10 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     FloatingActionButton fab;
+    FloatingActionButton fabAgregarTarea;
     Adapter adapter;
-    List<Model> listaNotas;
+    List<Nota> listaNotas;
 
-    DatabaseClass db;
+    DatabaseNotas db;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recyclerview);
         fab=findViewById(R.id.fab);
+        fabAgregarTarea=findViewById(R.id.fabAgregarTareas);
         coordinatorLayout=findViewById(R.id.layout_main);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,9 +52,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        fabAgregarTarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this , AgregarTareas.class);
+                startActivity(intent);
+            }
+        });
+
         listaNotas = new ArrayList<>();
 
-        db = new DatabaseClass(this);
+        db = new DatabaseNotas(this);
         cargarNotas();
         //System.out.println(listaNotas.size());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -98,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void eliminarNotas() {
-        DatabaseClass db = new DatabaseClass(MainActivity.this);
+        DatabaseNotas db = new DatabaseNotas(MainActivity.this);
         db.eliminarNotas();
         recreate();
     }
@@ -107,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
       Cursor cursor =  db.obtenerTodasLasNotas();
       if(cursor.getCount()!=0){
           while(cursor.moveToNext()){
-              listaNotas.add(new Model(cursor.getString(0),cursor.getString(1),cursor.getString(2)));
+              listaNotas.add(new Nota(cursor.getString(0),cursor.getString(1),cursor.getString(2)));
           }
 
       }else{
@@ -124,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int pos = viewHolder.getAdapterPosition();
-            Model item = adapter.getList().get(pos);
+            Nota item = adapter.getList().get(pos);
             adapter.removeItem(pos);
             Snackbar snack = Snackbar.make(coordinatorLayout,"Item deleted",Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
                 @Override
@@ -138,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     super.onDismissed(transientBottomBar, event);
 
                     if(!(event==DISMISS_EVENT_ACTION)){
-                        DatabaseClass db = new DatabaseClass(MainActivity.this);
+                        DatabaseNotas db = new DatabaseNotas(MainActivity.this);
                         db.deleteItem(item.getId());
                     }
                 }

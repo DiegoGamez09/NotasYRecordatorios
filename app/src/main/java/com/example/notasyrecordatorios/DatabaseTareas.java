@@ -9,18 +9,19 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-public class     DatabaseClass extends SQLiteOpenHelper {
+public class DatabaseTareas extends SQLiteOpenHelper {
 
     Context context;
     private static final String nombre = "NotasYRecordatorios";
     private static final int version = 1;
 
-    private static final String nombreTabla = "notas";
+    private static final String nombreTabla = "tareas";
     private static final String columnId = "id";
     private static final String columnTitulo = "titulo";
     private static final String columnDescripcion = "descripcion";
+    private static final String columnDate = "fecha";
 
-    public DatabaseClass(@Nullable Context context ) {
+    public DatabaseTareas(@Nullable Context context ) {
         super(context, nombre, null, version);
         this.context = context;
     }
@@ -30,7 +31,8 @@ public class     DatabaseClass extends SQLiteOpenHelper {
         String query = "CREATE TABLE "+ nombreTabla +" ("+
                 columnId+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + columnTitulo + " TEXT,"
-                + columnDescripcion + " TEXT);";
+                + columnDescripcion + " TEXT," +
+                columnDate+"DATE);";
         sqLiteDatabase.execSQL(query);
     }
 

@@ -34,7 +34,7 @@ public class  UpdateNotesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!TextUtils.isEmpty(titulo.getText().toString()) && !TextUtils.isEmpty(descripcion.getText().toString())){
-                    DatabaseClass db = new DatabaseClass(UpdateNotesActivity.this);
+                    DatabaseNotas db = new DatabaseNotas(UpdateNotesActivity.this);
 
                     db.ActualizarNota(titulo.getText().toString(), descripcion.getText().toString(), id);
                     Intent i = new Intent(UpdateNotesActivity.this, MainActivity.class);
