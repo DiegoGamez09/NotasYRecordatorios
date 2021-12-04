@@ -83,4 +83,14 @@ public class     DatabaseClass extends SQLiteOpenHelper {
         }
 
     }
+
+    void deleteItem(String id){
+        SQLiteDatabase database =  this.getWritableDatabase();
+        long result = database.delete(nombreTabla, "id=?", new String[]{id});
+        if(result==-1){
+            Toast.makeText(context, "No se ha eliminado correctamente", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Eliminado correctamente", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
