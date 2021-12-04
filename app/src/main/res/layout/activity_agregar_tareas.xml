@@ -44,17 +44,27 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_above="@+id/btnPickTime"/>
+        android:layout_above="@+id/btnPickDate"/>
 
     <Button
+        android:id="@+id/btnPickTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick time"
-        android:layout_centerHorizontal="true"
         android:layout_above="@+id/btnAgregar"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
-        android:id="@+id/btnPickTime"
-        />
+        android:background="@drawable/custom_btn_bg"
+        android:text="Pick time" />
+
+    <Button
+        android:id="@+id/btnPickDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnPickTime"
+        android:layout_marginLeft="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/custom_btn_bg"
+        android:text="Pick date" />
 
 
 </RelativeLayout>
