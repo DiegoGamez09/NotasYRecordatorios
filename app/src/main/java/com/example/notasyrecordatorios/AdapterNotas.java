@@ -18,14 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implements Filterable {
+public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder> implements Filterable {
 
     Context context;
     Activity activity;
     List<Nota> listaNotas;
     List<Nota> nuevaLista;
 
-    public Adapter(Context context, Activity activity, List<Nota> listaNotas) {
+    public AdapterNotas(Context context, Activity activity, List<Nota> listaNotas) {
         this.context = context;
         this.activity = activity;
         this.listaNotas = listaNotas;

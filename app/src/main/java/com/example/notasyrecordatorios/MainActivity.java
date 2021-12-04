@@ -29,10 +29,13 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton fab;
     FloatingActionButton fabAgregarTarea;
-    Adapter adapter;
+    AdapterNotas adapterNotas;
+    AdapterTareas adapterTareas;
     List<Nota> listaNotas;
+    List<Tarea> listaTareas;
 
     DatabaseNotas db;
+    DatabaseTareas dbTareas;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -61,16 +64,33 @@ public class MainActivity extends AppCompatActivity {
         });
 
         listaNotas = new ArrayList<>();
+        listaTareas= new ArrayList<>();
 
         db = new DatabaseNotas(this);
+        dbTareas = new DatabaseTareas(this);
         cargarNotas();
+        cargarTareas();
         //System.out.println(listaNotas.size());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this, MainActivity.this, listaNotas);
-        recyclerView.setAdapter(adapter);
+        //adapterTareas = new AdapterTareas(this, MainActivity.this, listaTareas);
+        adapterNotas = new AdapterNotas(this, MainActivity.this, listaNotas);
+        recyclerView.setAdapter(adapterNotas);
 
         ItemTouchHelper helper =  new ItemTouchHelper(callback);
         helper.attachToRecyclerView(recyclerView);
+    }
+
+    private void cargarTareas() {
+        Cursor cursor =  dbTareas.obtenerTodasLasTareas();
+        if(cursor.getCount()!=0){
+            while(cursor.moveToNext()){
+                listaTareas.add(new Tarea(cursor.getString(0),cursor.getString(1),cursor.getString(2), cursor.getString(3)));
+                System.out.println(cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" ");
+            }
+
+        }else{
+            Toast.makeText(this, "No hay Tareas", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -89,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
+                adapterNotas.getFilter().filter(s);
                 return true;
             }
         };
@@ -134,12 +154,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int pos = viewHolder.getAdapterPosition();
-            Nota item = adapter.getList().get(pos);
-            adapter.removeItem(pos);
+            Nota item = adapterNotas.getList().get(pos);
+            adapterNotas.removeItem(pos);
             Snackbar snack = Snackbar.make(coordinatorLayout,"Item deleted",Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    adapter.restoreItem(item,pos);
+                    adapterNotas.restoreItem(item,pos);
                     recyclerView.scrollToPosition(pos);
                 }
             }).addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
