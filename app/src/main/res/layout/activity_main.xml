@@ -18,7 +18,18 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:backgroundTint="@color/design_default_color_primary_dark"
-        android:src="@drawable/ic_baseline_add_24"
+        android:src="@drawable/ic_baseline_book_24"
+        android:tint="@color/white"
+        app:rippleColor="@color/white"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAgregarTareas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/design_default_color_primary_dark"
+        android:src="@drawable/ic_baseline_alarm_on_24"
         android:tint="@color/white"
         app:rippleColor="@color/white"
         tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
@@ -26,7 +37,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="746dp"
         android:layout_marginBottom="5dp"/>
 
 

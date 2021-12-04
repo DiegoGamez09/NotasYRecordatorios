@@ -17,16 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implements Filterable {
 
     Context context;
     Activity activity;
-    List<Model> listaNotas;
-    List<Model> nuevaLista;
+    List<Nota> listaNotas;
+    List<Nota> nuevaLista;
 
-    public Adapter(Context context, Activity activity, List<Model> listaNotas) {
+    public Adapter(Context context, Activity activity, List<Nota> listaNotas) {
         this.context = context;
         this.activity = activity;
         this.listaNotas = listaNotas;
@@ -74,13 +73,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implemen
     private Filter filtro=new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Model> filteredList=new ArrayList<>();
+            List<Nota> filteredList=new ArrayList<>();
             if (constraint ==null || constraint.length()==0){
                 filteredList.addAll(nuevaLista);
             }
             else{
                 String filtroPadre=constraint.toString().toLowerCase().trim();
-                for (Model item:nuevaLista){
+                for (Nota item:nuevaLista){
                     if(item.getTitulo().toLowerCase().contains(filtroPadre)){
                         filteredList.add(item);
                     }
@@ -113,7 +112,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implemen
 
     }
 
-    public List<Model> getList(){
+    public List<Nota> getList(){
         return listaNotas;
     }
 
@@ -122,7 +121,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implemen
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Model item, int position){
+    public void restoreItem(Nota item, int position){
         listaNotas.add(position,item);
         notifyItemInserted(position);
     }

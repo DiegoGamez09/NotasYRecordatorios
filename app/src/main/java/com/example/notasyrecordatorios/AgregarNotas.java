@@ -28,7 +28,7 @@ public class  AgregarNotas extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(titulo.getText().toString()) && !TextUtils.isEmpty(descripcion.getText().toString())){
-                    DatabaseClass db = new DatabaseClass(AgregarNotas.this);
+                    DatabaseNotas db = new DatabaseNotas(AgregarNotas.this);
                     db.agregarNota(titulo.getText().toString(),descripcion.getText().toString());
 
                     Intent intent = new Intent(AgregarNotas.this, MainActivity.class);
