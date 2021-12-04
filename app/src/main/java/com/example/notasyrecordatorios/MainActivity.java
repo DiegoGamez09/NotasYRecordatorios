@@ -2,11 +2,14 @@ package com.example.notasyrecordatorios;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +18,8 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     List<Model> listaNotas;
 
     DatabaseClass db;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recyclerview);
         fab=findViewById(R.id.fab);
+        coordinatorLayout=findViewById(R.id.layout_main);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new Adapter(this, MainActivity.this, listaNotas);
         recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper helper =  new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -104,6 +114,40 @@ public class MainActivity extends AppCompatActivity {
           Toast.makeText(this, "No hay notas", Toast.LENGTH_SHORT).show();
       }
     }
+
+    ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int pos = viewHolder.getAdapterPosition();
+            Model item = adapter.getList().get(pos);
+            adapter.removeItem(pos);
+            Snackbar snack = Snackbar.make(coordinatorLayout,"Item deleted",Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.restoreItem(item,pos);
+                    recyclerView.scrollToPosition(pos);
+                }
+            }).addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                @Override
+                public void onDismissed(Snackbar transientBottomBar, int event) {
+                    super.onDismissed(transientBottomBar, event);
+
+                    if(!(event==DISMISS_EVENT_ACTION)){
+                        DatabaseClass db = new DatabaseClass(MainActivity.this);
+                        db.deleteItem(item.getId());
+                    }
+                }
+            });
+
+            snack.setActionTextColor(Color.BLUE);
+            snack.show();
+        }
+    };
 
 
 }
