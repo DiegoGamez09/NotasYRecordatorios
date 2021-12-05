@@ -6,6 +6,7 @@ public class Tarea {
     String id;
     String fecha;
 
+
     public Tarea(String id, String titulo, String descripcion, String fecha) {
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -44,4 +45,5 @@ public class Tarea {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+
 }

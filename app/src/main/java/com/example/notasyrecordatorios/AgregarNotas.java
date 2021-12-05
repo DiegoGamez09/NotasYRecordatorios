@@ -22,7 +22,7 @@ public class  AgregarNotas extends AppCompatActivity {
 
         titulo = findViewById(R.id.titulo);
         descripcion = findViewById(R.id.descripcion);
-        btnAgregar = findViewById(R.id.btnAgregar);
+        btnAgregar = findViewById(R.id.btnEditarTarea);
 
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override

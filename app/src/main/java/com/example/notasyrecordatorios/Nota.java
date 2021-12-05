@@ -9,6 +9,7 @@ public class Nota {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.id = id;
+
     }
 
     public String getTitulo() {
@@ -34,4 +35,5 @@ public class Nota {
     public void setId(String id) {
         this.id = id;
     }
+
 }
