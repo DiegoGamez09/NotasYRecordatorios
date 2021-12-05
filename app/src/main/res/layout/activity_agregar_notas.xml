@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AgregarNotas">
+    tools:context=".Vistas.AgregarNotas"
+    android:clipToPadding="false">
 
     <EditText
         android:layout_width="match_parent"
@@ -34,6 +35,127 @@
         android:textColor="@color/white"
         android:id="@+id/btnEditarTarea"/>
 
+    <TextView
+        android:id="@+id/labelAgregarFoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/descripcion"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Agregar una imagen"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnAgregarImg"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelAgregarFoto"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/custom_btn_bg"
+        android:text="Elegir una imagen"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnTomarImg"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelAgregarFoto"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_btn_bg"
+        android:text="Tomar una foto"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/labelAgregarVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgImagen"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Agregar un video"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnAgregarVideo"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelAgregarVideo"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/custom_btn_bg"
+        android:text="Elegir un video"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnTomarVideo"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelAgregarVideo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_btn_bg"
+        android:text="Tomar un video"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imgImagen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAgregarImg"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <VideoView
+        android:id="@+id/VistaVideo"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/btnAgregarVideo"/>
 
 
 </RelativeLayout>

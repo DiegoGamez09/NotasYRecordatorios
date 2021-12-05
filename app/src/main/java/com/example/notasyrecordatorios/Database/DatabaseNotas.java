@@ -1,4 +1,4 @@
-package com.example.notasyrecordatorios;
+package com.example.notasyrecordatorios.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -40,7 +40,7 @@ public class DatabaseNotas extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    void agregarNota(String titulo, String descripcion){
+    public void agregarNota(String titulo, String descripcion){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(columnTitulo, titulo);
@@ -53,7 +53,7 @@ public class DatabaseNotas extends SQLiteOpenHelper {
         }
     }
 
-    Cursor obtenerTodasLasNotas(){
+    public Cursor obtenerTodasLasNotas(){
         String query = "SELECT * FROM "+ nombreTabla;
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor=null;
@@ -63,13 +63,13 @@ public class DatabaseNotas extends SQLiteOpenHelper {
         return cursor;
     }
 
-    void eliminarNotas(){
+    public void eliminarNotas(){
         SQLiteDatabase db= this.getWritableDatabase();
         String query = "DELETE FROM "+nombreTabla;
         db.execSQL(query);
     }
 
-    void ActualizarNota(String titulo, String descripcion, String id){
+    public void ActualizarNota(String titulo, String descripcion, String id){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(columnTitulo,titulo);
@@ -84,7 +84,7 @@ public class DatabaseNotas extends SQLiteOpenHelper {
 
     }
 
-    void deleteItem(String id){
+    public void deleteItem(String id){
         SQLiteDatabase database =  this.getWritableDatabase();
         long result = database.delete(nombreTabla, "id=?", new String[]{id});
         if(result==-1){

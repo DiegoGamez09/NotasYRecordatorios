@@ -1,4 +1,4 @@
-package com.example.notasyrecordatorios;
+package com.example.notasyrecordatorios.Vistas;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,12 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.notasyrecordatorios.AdapterNotas;
+import com.example.notasyrecordatorios.Database.DatabaseNotas;
+import com.example.notasyrecordatorios.Database.DatabaseTareas;
+import com.example.notasyrecordatorios.Modelo.Nota;
+import com.example.notasyrecordatorios.Modelo.Tarea;
+import com.example.notasyrecordatorios.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -71,15 +77,7 @@ public class MainActivity extends AppCompatActivity {
         dbTareas = new DatabaseTareas(this);
         cargarTareas();
         cargarNotas();
-        for (Object o:lista) {
-            if(o instanceof Nota){
-                Nota nota =(Nota) o;
-                System.out.println("Nota: "+ nota.id +" " +nota.titulo +" " +nota.descripcion +" ");
-            }else{
-                Tarea tarea =(Tarea) o;
-                System.out.println("Tarea: "+ tarea.id +" " +tarea.titulo +" " +tarea.descripcion +" "+ tarea.fecha);
-            }
-        }
+
         //System.out.println(listaNotas.size());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //adapterTareas = new AdapterTareas(this, MainActivity.this, listaTareas);
@@ -135,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(item.getItemId()==R.id.delete_all_notes){
             eliminarNotas();
+        }else if(item.getItemId()==R.id.delete_all_Tareas){
+            eliminarTareas();
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,6 +143,12 @@ public class MainActivity extends AppCompatActivity {
     private void eliminarNotas() {
         DatabaseNotas db = new DatabaseNotas(MainActivity.this);
         db.eliminarNotas();
+        recreate();
+    }
+
+    private void eliminarTareas() {
+        DatabaseTareas db = new DatabaseTareas(MainActivity.this);
+        db.eliminarTareas();
         recreate();
     }
 

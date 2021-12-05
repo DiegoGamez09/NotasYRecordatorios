@@ -1,4 +1,4 @@
-package com.example.notasyrecordatorios;
+package com.example.notasyrecordatorios.Modelo;
 
 public class Tarea {
     String titulo;

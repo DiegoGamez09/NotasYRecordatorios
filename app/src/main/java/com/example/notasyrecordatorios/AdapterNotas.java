@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +16,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.notasyrecordatorios.Modelo.Nota;
+import com.example.notasyrecordatorios.Modelo.Tarea;
+import com.example.notasyrecordatorios.Vistas.UpdateNotesActivity;
+import com.example.notasyrecordatorios.Vistas.UpdateTareasActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +88,7 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
                     intent.putExtra("descripcion", tarea.getDescripcion());
                     intent.putExtra("fecha", tarea.getFecha());
                     intent.putExtra("id", tarea.getId());
-                    Toast.makeText(context, "index: " + i, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "index: " + i, Toast.LENGTH_SHORT).show();
                     activity.startActivity(intent);
 
                 }
