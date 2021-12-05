@@ -3,16 +3,20 @@ package com.example.notasyrecordatorios;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -45,10 +49,15 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         int i=position;
+        //GradientDrawable gr =(GradientDrawable) holder.contenedor.getBackground();
         if(lista.get(i) instanceof Nota) {
             Nota nota =(Nota) lista.get(i);
             holder.titulo.setText(nota.getTitulo());
             holder.descripcion.setText(nota.getDescripcion());
+            holder.carview.setBackgroundColor(Color.parseColor("#7d9ccf"));
+            //gr.setColor(Color.parseColor(nota.getColor()));
+
+            //gr.setColor(Color.BLUE);
             holder.contenedor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -65,12 +74,16 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
             Tarea tarea =(Tarea) lista.get(i);
             holder.titulo.setText(tarea.getTitulo());
             holder.descripcion.setText(tarea.getDescripcion());
+            holder.fecha.setText("Finaliza el: "+ tarea.getFecha());
+            holder.carview.setBackgroundColor(Color.parseColor("#eec859"));
+            //gr.setColor(Color.YELLOW);
             holder.contenedor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, UpdateNotesActivity.class);
+                    Intent intent = new Intent(context, UpdateTareasActivity.class);
                     intent.putExtra("titulo", tarea.getTitulo());
                     intent.putExtra("descripcion", tarea.getDescripcion());
+                    intent.putExtra("fecha", tarea.getFecha());
                     intent.putExtra("id", tarea.getId());
                     Toast.makeText(context, "index: " + i, Toast.LENGTH_SHORT).show();
                     activity.startActivity(intent);
@@ -105,6 +118,11 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
                         if(nota.getTitulo().toLowerCase().contains(filtroPadre)){
                             filteredList.add(item);
                         }
+                    }else{
+                        Tarea tarea =(Tarea) item;
+                        if(tarea.getTitulo().toLowerCase().contains(filtroPadre)){
+                            filteredList.add(item);
+                        }
                     }
 
                 }
@@ -124,13 +142,16 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
     };
 
     public class MyViewHolder extends RecyclerView.ViewHolder  {
-        TextView titulo, descripcion;
+        TextView titulo, descripcion, fecha;
         RelativeLayout contenedor;
+        CardView carview;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             titulo = itemView.findViewById(R.id.title);
             descripcion = itemView.findViewById(R.id.description);
             contenedor = itemView.findViewById(R.id.note_layout);
+            fecha = itemView.findViewById(R.id.fecha);
+            carview = itemView.findViewById(R.id.cardview);
         }
 
 

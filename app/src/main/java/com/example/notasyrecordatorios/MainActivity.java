@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     FloatingActionButton fabAgregarTarea;
     AdapterNotas adapterNotas;
-    AdapterTareas adapterTareas;
     List<Nota> listaNotas;
     List<Tarea> listaTareas;
     List<Object> lista;
@@ -103,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "No hay Tareas", Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     @Override

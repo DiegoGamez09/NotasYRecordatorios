@@ -26,6 +26,10 @@ public class AgregarTareas extends AppCompatActivity {
     Button btnTime;
     Button btnDate;
     int currHour, currMinute, currSecond,currDay, currMonth, currYear;
+
+    String tiempo="";
+    String fecha="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +37,7 @@ public class AgregarTareas extends AppCompatActivity {
 
         titulo = findViewById(R.id.titulo);
         descripcion = findViewById(R.id.descripcion);
-        btnAgregar = findViewById(R.id.btnAgregar);
+        btnAgregar = findViewById(R.id.btnEditarTarea);
         time=findViewById(R.id.time);
         btnTime=findViewById(R.id.btnPickTime);
         btnDate=findViewById(R.id.btnPickDate);
@@ -47,13 +51,16 @@ public class AgregarTareas extends AppCompatActivity {
         currYear=calendar.get(Calendar.YEAR);
 
 
+
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialog dialog = new TimePickerDialog(AgregarTareas.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        time.setText(i+":"+i1+":00");
+                        tiempo=i+":"+i1+":00";
+                        time.setText(tiempo);
+
                     }
                 }, currHour, currMinute, false);
                 dialog.show();
@@ -66,7 +73,9 @@ public class AgregarTareas extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(AgregarTareas.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        time.setText(i+"-"+i1+"-"+i2+" "+time.getText().toString());
+                        fecha=i+"-"+(i1+1)+"-"+i2+" ";
+                        time.setText(fecha + tiempo);
+
                     }
                 }, currYear,currMonth,currDay);
                 dialog.show();

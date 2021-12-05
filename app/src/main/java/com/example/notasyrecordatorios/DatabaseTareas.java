@@ -57,7 +57,7 @@ public class DatabaseTareas extends SQLiteOpenHelper {
     }
 
     Cursor obtenerTodasLasTareas(){
-        String query = "SELECT * FROM "+ nombreTabla;
+        String query = "SELECT * FROM "+ nombreTabla + " order by fecha,id DESC";
         SQLiteDatabase db= this.getReadableDatabase();
         Cursor cursor=null;
         if(db!=null){
@@ -66,13 +66,13 @@ public class DatabaseTareas extends SQLiteOpenHelper {
         return cursor;
     }
 
-    void eliminarNotas(){
+    void eliminarTareas(){
         SQLiteDatabase db= this.getWritableDatabase();
         String query = "DELETE FROM "+nombreTabla;
         db.execSQL(query);
     }
 
-    void ActualizarNota(String titulo, String descripcion, String id, String fecha){
+    void ActualizarTarea(String titulo, String descripcion, String id, String fecha){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(columnTitulo,titulo);
