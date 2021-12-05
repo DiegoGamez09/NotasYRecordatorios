@@ -28,8 +28,8 @@ public class AdapterTareas extends RecyclerView.Adapter<AdapterTareas.MyViewHold
     public AdapterTareas(Context context, Activity activity, List<Tarea> listaTareas) {
         this.context = context;
         this.activity = activity;
-        this.listaTareas = this.listaTareas;
-        nuevaLista=new ArrayList<>(this.listaTareas);
+        this.listaTareas = listaTareas;
+        nuevaLista=new ArrayList<>(listaTareas);
     }
 
     @NonNull

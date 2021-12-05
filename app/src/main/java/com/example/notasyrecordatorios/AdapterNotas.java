@@ -23,13 +23,15 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
     Context context;
     Activity activity;
     List<Nota> listaNotas;
-    List<Nota> nuevaLista;
+    List<Tarea> listaTareas;
+    List<Object> nuevaLista;
+    List<Object> lista;
 
-    public AdapterNotas(Context context, Activity activity, List<Nota> listaNotas) {
+    public AdapterNotas(Context context, Activity activity, List<Object> lista) {
         this.context = context;
         this.activity = activity;
-        this.listaNotas = listaNotas;
-        nuevaLista=new ArrayList<>(listaNotas);
+        this.lista = lista;
+        nuevaLista=new ArrayList<>(lista);
     }
 
     @NonNull
@@ -43,26 +45,44 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         int i=position;
-        holder.titulo.setText(listaNotas.get(position).getTitulo());
-        holder.descripcion.setText(listaNotas.get(position).getDescripcion());
+        if(lista.get(i) instanceof Nota) {
+            Nota nota =(Nota) lista.get(i);
+            holder.titulo.setText(nota.getTitulo());
+            holder.descripcion.setText(nota.getDescripcion());
+            holder.contenedor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, UpdateNotesActivity.class);
+                    intent.putExtra("titulo", nota.getTitulo());
+                    intent.putExtra("descripcion", nota.getDescripcion());
+                    intent.putExtra("id", nota.getId());
+                    Toast.makeText(context, "index: " + i, Toast.LENGTH_SHORT).show();
+                    activity.startActivity(intent);
 
-        holder.contenedor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,UpdateNotesActivity.class);
-                intent.putExtra("titulo", listaNotas.get(i).getTitulo());
-                intent.putExtra("descripcion", listaNotas.get(i).getDescripcion());
-                intent.putExtra("id", listaNotas.get(i).getId());
-                Toast.makeText(context, "index: "+i, Toast.LENGTH_SHORT).show();
-                activity.startActivity(intent);
+                }
+            });
+        }else{
+            Tarea tarea =(Tarea) lista.get(i);
+            holder.titulo.setText(tarea.getTitulo());
+            holder.descripcion.setText(tarea.getDescripcion());
+            holder.contenedor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, UpdateNotesActivity.class);
+                    intent.putExtra("titulo", tarea.getTitulo());
+                    intent.putExtra("descripcion", tarea.getDescripcion());
+                    intent.putExtra("id", tarea.getId());
+                    Toast.makeText(context, "index: " + i, Toast.LENGTH_SHORT).show();
+                    activity.startActivity(intent);
 
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return listaNotas.size();
+        return lista.size();
     }
 
     @Override
@@ -73,16 +93,20 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
     private Filter filtro=new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Nota> filteredList=new ArrayList<>();
+            List<Object> filteredList=new ArrayList<>();
             if (constraint ==null || constraint.length()==0){
                 filteredList.addAll(nuevaLista);
             }
             else{
                 String filtroPadre=constraint.toString().toLowerCase().trim();
-                for (Nota item:nuevaLista){
-                    if(item.getTitulo().toLowerCase().contains(filtroPadre)){
-                        filteredList.add(item);
+                for (Object item:nuevaLista){
+                    if(item instanceof Nota){
+                        Nota nota =(Nota) item;
+                        if(nota.getTitulo().toLowerCase().contains(filtroPadre)){
+                            filteredList.add(item);
+                        }
                     }
+
                 }
 
             }
@@ -93,8 +117,8 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            listaNotas.clear();
-            listaNotas.addAll((List)results.values);
+            lista.clear();
+            lista.addAll((List)results.values);
             notifyDataSetChanged();
         }
     };
@@ -112,17 +136,17 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
 
     }
 
-    public List<Nota> getList(){
-        return listaNotas;
+    public List<Object> getList(){
+        return lista;
     }
 
     public void removeItem(int position){
-        listaNotas.remove(position);
+        lista.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Nota item, int position){
-        listaNotas.add(position,item);
+    public void restoreItem(Object item, int position){
+        lista.add(position,item);
         notifyItemInserted(position);
     }
 }
