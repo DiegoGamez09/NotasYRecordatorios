@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     AdapterTareas adapterTareas;
     List<Nota> listaNotas;
     List<Tarea> listaTareas;
+    List<Object> lista;
 
     DatabaseNotas db;
     DatabaseTareas dbTareas;
@@ -65,15 +66,25 @@ public class MainActivity extends AppCompatActivity {
 
         listaNotas = new ArrayList<>();
         listaTareas= new ArrayList<>();
+        lista = new ArrayList<>();
 
         db = new DatabaseNotas(this);
         dbTareas = new DatabaseTareas(this);
-        cargarNotas();
         cargarTareas();
+        cargarNotas();
+        for (Object o:lista) {
+            if(o instanceof Nota){
+                Nota nota =(Nota) o;
+                System.out.println("Nota: "+ nota.id +" " +nota.titulo +" " +nota.descripcion +" ");
+            }else{
+                Tarea tarea =(Tarea) o;
+                System.out.println("Tarea: "+ tarea.id +" " +tarea.titulo +" " +tarea.descripcion +" "+ tarea.fecha);
+            }
+        }
         //System.out.println(listaNotas.size());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //adapterTareas = new AdapterTareas(this, MainActivity.this, listaTareas);
-        adapterNotas = new AdapterNotas(this, MainActivity.this, listaNotas);
+        adapterNotas = new AdapterNotas(this, MainActivity.this, lista);
         recyclerView.setAdapter(adapterNotas);
 
         ItemTouchHelper helper =  new ItemTouchHelper(callback);
@@ -85,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         if(cursor.getCount()!=0){
             while(cursor.moveToNext()){
                 listaTareas.add(new Tarea(cursor.getString(0),cursor.getString(1),cursor.getString(2), cursor.getString(3)));
+                lista.add(new Tarea(cursor.getString(0),cursor.getString(1),cursor.getString(2), cursor.getString(3)));
                 System.out.println(cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" ");
             }
 
@@ -138,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
       if(cursor.getCount()!=0){
           while(cursor.moveToNext()){
               listaNotas.add(new Nota(cursor.getString(0),cursor.getString(1),cursor.getString(2)));
+              lista.add(new Nota(cursor.getString(0),cursor.getString(1),cursor.getString(2)));
           }
 
       }else{
@@ -154,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int pos = viewHolder.getAdapterPosition();
-            Nota item = adapterNotas.getList().get(pos);
+            Object item = adapterNotas.getList().get(pos);
             adapterNotas.removeItem(pos);
             Snackbar snack = Snackbar.make(coordinatorLayout,"Item deleted",Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
                 @Override
@@ -168,8 +181,15 @@ public class MainActivity extends AppCompatActivity {
                     super.onDismissed(transientBottomBar, event);
 
                     if(!(event==DISMISS_EVENT_ACTION)){
-                        DatabaseNotas db = new DatabaseNotas(MainActivity.this);
-                        db.deleteItem(item.getId());
+                        if(item instanceof Nota) {
+                            Nota nota =(Nota) item;
+                            DatabaseNotas db = new DatabaseNotas(MainActivity.this);
+                            db.deleteItem(nota.getId());
+                        }else{
+                            Tarea tarea =(Tarea) item;
+                            DatabaseTareas db = new DatabaseTareas(MainActivity.this);
+                            db.deleteItem(tarea.getId());
+                        }
                     }
                 }
             });
