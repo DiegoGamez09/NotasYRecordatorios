@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Vistas.AgregarNotas"
-    android:clipToPadding="false">
+    android:clipToPadding="true"
+    >
 
     <EditText
+        android:id="@+id/titulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:hint="Titulo"
-        android:id="@+id/titulo"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_alignParentBottom="true"
+        android:layout_below="@+id/VistaVideo"
         android:background="@drawable/custom_btn_bg"
         android:text="Agregar nota"
         android:textSize="18sp"
@@ -136,7 +148,7 @@
     <ImageView
         android:id="@+id/imgImagen"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:layout_below="@+id/btnAgregarImg"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -149,13 +161,19 @@
         android:id="@+id/VistaVideo"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_below="@+id/btnAgregarVideo"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_below="@+id/btnAgregarVideo"/>
+        android:layout_marginBottom="8dp" />
+
+
+
+
+
 
 
 </RelativeLayout>
+</ScrollView>
