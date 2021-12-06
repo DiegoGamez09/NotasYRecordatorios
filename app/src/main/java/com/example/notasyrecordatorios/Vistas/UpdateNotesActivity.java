@@ -1,4 +1,4 @@
-package com.example.notasyrecordatorios;
+package com.example.notasyrecordatorios.Vistas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,41 +8,39 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class UpdateTareasActivity extends AppCompatActivity {
+import com.example.notasyrecordatorios.Database.DatabaseNotas;
+import com.example.notasyrecordatorios.R;
+
+public class  UpdateNotesActivity extends AppCompatActivity {
 
     EditText titulo, descripcion;
     Button btnEditar;
     String id;
-    TextView fecha;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_tareas);
+        setContentView(R.layout.activity_update_notes);
 
         titulo=findViewById(R.id.titulo);
         descripcion = findViewById(R.id.descripcion);
-        btnEditar = findViewById(R.id.btnEditarTarea);
-        fecha= findViewById(R.id.time);
+        btnEditar = findViewById(R.id.btnEditar);
 
         Intent intent=getIntent();
 
         titulo.setText(intent.getStringExtra("titulo"));
         descripcion.setText(intent.getStringExtra("descripcion"));
         id=intent.getStringExtra("id");
-        fecha.setText(intent.getStringExtra("fecha"));
 
         btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!TextUtils.isEmpty(titulo.getText().toString()) && !TextUtils.isEmpty(descripcion.getText().toString())){
-                    DatabaseTareas db = new DatabaseTareas(UpdateTareasActivity.this);
+                    DatabaseNotas db = new DatabaseNotas(UpdateNotesActivity.this);
 
-                    db.ActualizarTarea(titulo.getText().toString(), descripcion.getText().toString(), id, fecha.getText().toString());
-                    Intent i = new Intent(UpdateTareasActivity.this, MainActivity.class);
+                    db.ActualizarNota(titulo.getText().toString(), descripcion.getText().toString(), id);
+                    Intent i = new Intent(UpdateNotesActivity.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
                     finish();
@@ -52,7 +50,5 @@ public class UpdateTareasActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 }

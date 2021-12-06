@@ -10,19 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotasYRecordatorios">
         <activity
-            android:name=".UpdateTareasActivity"
+            android:name=".Vistas.UpdateTareasActivity"
             android:exported="true" />
         <activity
-            android:name=".AgregarTareas"
+            android:name=".Vistas.AgregarTareas"
             android:exported="true" />
         <activity
-            android:name=".UpdateNotesActivity"
+            android:name=".Vistas.UpdateNotesActivity"
             android:exported="true" />
         <activity
-            android:name=".AgregarNotas"
+            android:name=".Vistas.AgregarNotas"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Vistas.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

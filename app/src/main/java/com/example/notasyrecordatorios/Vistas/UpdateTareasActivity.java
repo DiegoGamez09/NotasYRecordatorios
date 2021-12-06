@@ -1,7 +1,6 @@
-package com.example.notasyrecordatorios;
+package com.example.notasyrecordatorios.Vistas;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -16,12 +15,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.notasyrecordatorios.Database.DatabaseTareas;
+import com.example.notasyrecordatorios.R;
+
 import java.util.Calendar;
 
+public class UpdateTareasActivity extends AppCompatActivity {
 
-public class AgregarTareas extends AppCompatActivity {
     EditText titulo, descripcion;
-    Button btnAgregar;
+    Button btnEditar;
+    String id;
+    TextView date;
     TextView time;
     Button btnTime;
     Button btnDate;
@@ -33,12 +37,12 @@ public class AgregarTareas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agregar_tareas);
+        setContentView(R.layout.activity_update_tareas);
 
-        titulo = findViewById(R.id.titulo);
+        titulo=findViewById(R.id.titulo);
         descripcion = findViewById(R.id.descripcion);
-        btnAgregar = findViewById(R.id.btnEditarTarea);
-        time=findViewById(R.id.time);
+        btnEditar = findViewById(R.id.btnEditarTarea);
+        date = findViewById(R.id.time);
         btnTime=findViewById(R.id.btnPickTime);
         btnDate=findViewById(R.id.btnPickDate);
 
@@ -50,16 +54,21 @@ public class AgregarTareas extends AppCompatActivity {
         currMonth=calendar.get(Calendar.MONTH);
         currYear=calendar.get(Calendar.YEAR);
 
+        Intent intent=getIntent();
 
+        titulo.setText(intent.getStringExtra("titulo"));
+        descripcion.setText(intent.getStringExtra("descripcion"));
+        id=intent.getStringExtra("id");
+        date.setText(intent.getStringExtra("fecha"));
 
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog dialog = new TimePickerDialog(AgregarTareas.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog dialog = new TimePickerDialog(UpdateTareasActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
                         tiempo=i+":"+i1+":00";
-                        time.setText(tiempo);
+                        date.setText(tiempo);
 
                     }
                 }, currHour, currMinute, false);
@@ -70,11 +79,11 @@ public class AgregarTareas extends AppCompatActivity {
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog dialog = new DatePickerDialog(AgregarTareas.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(UpdateTareasActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         fecha=i+"-"+(i1+1)+"-"+i2+" ";
-                        time.setText(fecha + tiempo);
+                        date.setText(fecha + tiempo);
 
                     }
                 }, currYear,currMonth,currDay);
@@ -82,23 +91,24 @@ public class AgregarTareas extends AppCompatActivity {
             }
         });
 
-        btnAgregar.setOnClickListener(new View.OnClickListener() {
+        btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!TextUtils.isEmpty(titulo.getText().toString()) && !TextUtils.isEmpty(descripcion.getText().toString())){
-                    DatabaseTareas db = new DatabaseTareas(AgregarTareas.this);
-                    System.out.println(time.getText().toString());
-                    db.agregarTarea(titulo.getText().toString(),descripcion.getText().toString(),time.getText().toString());
+                if(!TextUtils.isEmpty(titulo.getText().toString()) && !TextUtils.isEmpty(descripcion.getText().toString())){
+                    DatabaseTareas db = new DatabaseTareas(UpdateTareasActivity.this);
 
-                    Intent intent = new Intent(AgregarTareas.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    db.ActualizarTarea(titulo.getText().toString(), descripcion.getText().toString(), id, date.getText().toString());
+                    Intent i = new Intent(UpdateTareasActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
                     finish();
 
                 }else{
-                    Toast.makeText(AgregarTareas.this,"Ambos campos deben de ser llenados",Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "Ambos campos deben ser llenados", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
     }
 }

@@ -7,7 +7,7 @@
 
     android:background="#d2d2d2"
     app:layout_behavior="@string/fab_transformation_scrim_behavior"
-    tools:context=".MainActivity"
+    tools:context=".Vistas.MainActivity"
     android:id="@+id/layout_main"
     >
 

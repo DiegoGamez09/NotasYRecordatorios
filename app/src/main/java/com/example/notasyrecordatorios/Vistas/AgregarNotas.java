@@ -1,4 +1,4 @@
-package com.example.notasyrecordatorios;
+package com.example.notasyrecordatorios.Vistas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.notasyrecordatorios.Database.DatabaseNotas;
+import com.example.notasyrecordatorios.R;
 
 public class  AgregarNotas extends AppCompatActivity {
 
