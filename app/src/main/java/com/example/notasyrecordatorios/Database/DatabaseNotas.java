@@ -19,6 +19,8 @@ public class DatabaseNotas extends SQLiteOpenHelper {
     private static final String columnId = "id";
     private static final String columnTitulo = "titulo";
     private static final String columnDescripcion = "descripcion";
+    private static final String columnImagen = "imagen";
+    private static final String columnVideo = "video";
 
     public DatabaseNotas(@Nullable Context context ) {
         super(context, nombre, null, version);
@@ -30,7 +32,9 @@ public class DatabaseNotas extends SQLiteOpenHelper {
         String query = "CREATE TABLE "+ nombreTabla +" ("+
                 columnId+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + columnTitulo + " TEXT,"
-                + columnDescripcion + " TEXT);";
+                + columnDescripcion + " TEXT,"
+                + columnImagen+" TEXT,"
+                +columnVideo+" TEXT);";
         sqLiteDatabase.execSQL(query);
     }
 
@@ -40,11 +44,13 @@ public class DatabaseNotas extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void agregarNota(String titulo, String descripcion){
+    public void agregarNota(String titulo, String descripcion, String imagen, String video){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(columnTitulo, titulo);
         cv.put(columnDescripcion,descripcion);
+        cv.put(columnImagen,imagen);
+        cv.put(columnVideo,video);
         long resultValue = db.insert(nombreTabla, null, cv);
         if (resultValue == -1){
             Toast.makeText(context, "Los datos no se agregaron de forma exitosa", Toast.LENGTH_SHORT).show();
@@ -69,11 +75,13 @@ public class DatabaseNotas extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-    public void ActualizarNota(String titulo, String descripcion, String id){
+    public void ActualizarNota(String titulo, String descripcion, String id, String imagen, String video){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(columnTitulo,titulo);
         cv.put(columnDescripcion,descripcion);
+        cv.put(columnImagen,imagen);
+        cv.put(columnVideo,video);
 
         long res= db.update(nombreTabla, cv,"id=?",new String[]{id});
         if (res==-1){
