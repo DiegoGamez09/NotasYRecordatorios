@@ -68,7 +68,8 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
                     intent.putExtra("titulo", nota.getTitulo());
                     intent.putExtra("descripcion", nota.getDescripcion());
                     intent.putExtra("id", nota.getId());
-                    Toast.makeText(context, "index: " + i, Toast.LENGTH_SHORT).show();
+                    intent.putExtra("imagen", nota.getImagen());
+                    Toast.makeText(context, "URI: " + nota.getImagen(), Toast.LENGTH_LONG).show();
                     activity.startActivity(intent);
 
                 }
