@@ -156,8 +156,8 @@ public class MainActivity extends AppCompatActivity {
       Cursor cursor =  db.obtenerTodasLasNotas();
       if(cursor.getCount()!=0){
           while(cursor.moveToNext()){
-              listaNotas.add(new Nota(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),""));
-              lista.add(new Nota(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),""));
+              listaNotas.add(new Nota(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4)));
+              lista.add(new Nota(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4)));
           }
 
       }else{

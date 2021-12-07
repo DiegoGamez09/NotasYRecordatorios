@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 public class DatabaseTareas extends SQLiteOpenHelper {
 
     Context context;
-    private static final String nombre = "NotasYTareas";
+    private static final String nombre = "tareasreloaded";
     private static final int version = 1;
 
     private static final String nombreTabla = "tareas";
