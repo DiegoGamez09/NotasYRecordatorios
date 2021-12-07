@@ -70,7 +70,8 @@ public class AdapterNotas extends RecyclerView.Adapter<AdapterNotas.MyViewHolder
                     intent.putExtra("id", nota.getId());
                     intent.putExtra("imagen", nota.getImagen());
                     intent.putExtra("video", nota.getVideo());
-                    Toast.makeText(context, "URI: " + nota.getImagen(), Toast.LENGTH_LONG).show();
+                    intent.putExtra("audio", nota.getAudio());
+                    Toast.makeText(context, "URI: " + nota.getAudio(), Toast.LENGTH_LONG).show();
                     activity.startActivity(intent);
 
                 }

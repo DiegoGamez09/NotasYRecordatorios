@@ -3,4 +3,7 @@
     <external-path
         name="com.example.notasyrecordatorios"
         path="Android/data/com.example.notasyrecordatorios/files/Pictures"/>
+    <external-files-path
+        name="Pictures"
+        path="/Pictures"/>
 </paths>

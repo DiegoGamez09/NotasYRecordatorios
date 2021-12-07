@@ -1,5 +1,7 @@
 package com.example.notasyrecordatorios.Vistas;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,11 +15,15 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,13 +48,16 @@ public class  AgregarNotas extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 10;
     int position=1;
     EditText titulo, descripcion;
-    Button btnAgregar, btnTomarFoto, btnTomarVideo, btnElegirImagen, btnElegirVideo;
+    Button btnAgregar, btnTomarFoto, btnTomarVideo, btnElegirImagen, btnElegirVideo, btnGrabarAudio, btnReproducir;
     ImageView vistaImagen;
     VideoView vistaVideo;
     Boolean cargarimg=false;
     String rutaGlobal ="";
     String rutaGlobalVideo="";
+    String rutaGlobalAudio="";
     MediaController mediaController;
+    MediaRecorder mediaRecorder;
+    File audioFile;
 
 
     @Override
@@ -56,8 +65,12 @@ public class  AgregarNotas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_notas);
 
-        if(ContextCompat.checkSelfPermission(AgregarNotas.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AgregarNotas.this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(AgregarNotas.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1000);
+        if(ContextCompat.checkSelfPermission(AgregarNotas.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(AgregarNotas.this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(AgregarNotas.this, Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED
+        ){
+                    ActivityCompat.requestPermissions(AgregarNotas.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1000);
+                    ActivityCompat.requestPermissions(AgregarNotas.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, 1000);;
         }
 
 
@@ -66,10 +79,12 @@ public class  AgregarNotas extends AppCompatActivity {
         titulo = findViewById(R.id.titulo);
         descripcion = findViewById(R.id.descripcion);
         btnAgregar = findViewById(R.id.btnEditarTarea);
-        btnTomarFoto = findViewById(R.id.btnTomarImg);
-        btnElegirImagen = findViewById(R.id.btnAgregarImg);
-        btnTomarVideo = findViewById(R.id.btnTomarVideo);
-        btnElegirVideo = findViewById(R.id.btnAgregarVideo);
+        btnGrabarAudio=findViewById(R.id.btnGrabarAudio);
+        btnReproducir=findViewById(R.id.btnReproducirAudio);
+//        btnTomarFoto = findViewById(R.id.btnTomarImg);
+//        btnElegirImagen = findViewById(R.id.btnAgregarImg);
+//        btnTomarVideo = findViewById(R.id.btnTomarVideo);
+//        btnElegirVideo = findViewById(R.id.btnAgregarVideo);
         vistaImagen = findViewById(R.id.imgImagen);
         vistaVideo = findViewById(R.id.VistaVideo);
 
@@ -95,12 +110,13 @@ public class  AgregarNotas extends AppCompatActivity {
             }
         });
 
+
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(titulo.getText().toString()) && !TextUtils.isEmpty(descripcion.getText().toString())){
                     DatabaseNotas db = new DatabaseNotas(AgregarNotas.this);
-                    db.agregarNota(titulo.getText().toString(),descripcion.getText().toString(), rutaGlobal, rutaGlobalVideo);
+                    db.agregarNota(titulo.getText().toString(),descripcion.getText().toString(), rutaGlobal, rutaGlobalVideo, rutaGlobalAudio);
 
                     Intent intent = new Intent(AgregarNotas.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -113,7 +129,21 @@ public class  AgregarNotas extends AppCompatActivity {
             }
         });
 
-        btnTomarVideo.setOnClickListener(new View.OnClickListener() {
+        btnGrabarAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                grabarAudio();
+            }
+        });
+
+        btnReproducir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reproducirAudio();
+            }
+        });
+
+/*        btnTomarVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 File file = new File(titulo.getText()+ ".mp4");
@@ -142,10 +172,79 @@ public class  AgregarNotas extends AppCompatActivity {
             public void onClick(View view) {
                 tomarVideoGaleria();
             }
-        });
+        });*/
 
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.options_multimedia, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()==R.id.btnMenuAgregarImgCamara){
+            abrirCamara();
+        }else if(item.getItemId()==R.id.btnMenuAgregarVideoCamera){
+            abrirCamaraVideo();
+        }else if(item.getItemId()==R.id.btnMenuAgregarImgGaleria){
+            elegirImagen();
+        }else if(item.getItemId()==R.id.btnMenuAgregarVideoGaleria){
+            tomarVideoGaleria();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void grabarAudio(){
+        String path = new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date())+".mp3";
+        audioFile = new File(
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                , path );
+        if(mediaRecorder==null){
+            //rutaGlobalAudio=Environment.getExternalStorageDirectory().getAbsolutePath()+"/grabacion.mp3";
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                rutaGlobalAudio=audioFile.getAbsolutePath();
+                mediaRecorder.setOutputFile(rutaGlobalAudio);
+                System.out.println(rutaGlobalAudio);
+                Toast.makeText(AgregarNotas.this, rutaGlobalAudio, Toast.LENGTH_LONG).show();
+            }
+
+            try{
+                mediaRecorder.prepare();
+                mediaRecorder.start();
+            }catch (IOException e){
+
+            }
+            Toast.makeText(AgregarNotas.this, "Grabando...", Toast.LENGTH_SHORT).show();
+        }else if(mediaRecorder !=null){
+            //mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder=null;
+            Toast.makeText(AgregarNotas.this, "Grabación terminada", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void reproducirAudio(){
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try{
+            System.out.println(rutaGlobalAudio);
+            mediaPlayer.setDataSource(rutaGlobalAudio);
+            mediaPlayer.prepare();
+        }catch (IOException e){
+
+        }
+        mediaPlayer.start();
+        Toast.makeText(AgregarNotas.this, "Reproduciendo", Toast.LENGTH_SHORT).show();
     }
 
     private void tomarVideoGaleria() {
@@ -184,6 +283,7 @@ public class  AgregarNotas extends AppCompatActivity {
 
         if(foto!=null){
             Uri uri = FileProvider.getUriForFile(AgregarNotas.this, "com.example.notasyrecordatorios", foto);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         //if(intent.resolveActivity(getPackageManager())!=null){
@@ -203,6 +303,7 @@ public class  AgregarNotas extends AppCompatActivity {
 
         if(video!=null){
             Uri uri = FileProvider.getUriForFile(AgregarNotas.this, "com.example.notasyrecordatorios", video);
+            intent.addFlags(intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
         //if(intent.resolveActivity(getPackageManager())!=null){
@@ -217,6 +318,7 @@ public class  AgregarNotas extends AppCompatActivity {
         File storageFile = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File fotoFile = File.createTempFile(imgFileName, ".jpg", storageFile);
         rutaGlobal = fotoFile.getAbsolutePath();
+        FileProvider.getUriForFile(AgregarNotas.this, "com.example.notasyrecordatorios", fotoFile);
         return fotoFile;
     }
 
@@ -229,6 +331,17 @@ public class  AgregarNotas extends AppCompatActivity {
         rutaGlobalVideo = videoFile.getAbsolutePath();
         System.out.println(rutaGlobalVideo);
         return videoFile;
+    }
+
+    private File crearAudio() throws IOException {
+        String timestamp = new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date());
+        String audioFileName = "audio "+ timestamp;
+
+        File storageFile = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File audioFile = File.createTempFile(audioFileName, ".mp3", storageFile);
+        rutaGlobalAudio = audioFile.getAbsolutePath();
+        System.out.println(rutaGlobalVideo);
+        return audioFile;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

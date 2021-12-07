@@ -6,15 +6,16 @@ public class Nota {
     String id;
     String imagen;
     String video;
+    String audio;
 
 
-
-    public Nota(String id, String titulo, String descripcion, String imagen, String video) {
+    public Nota(String id, String titulo, String descripcion, String imagen, String video, String audio) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.id = id;
         this.imagen=imagen;
         this.video=video;
+        this.audio=audio;
     }
 
     public String getTitulo() {
@@ -57,4 +58,11 @@ public class Nota {
         this.video = video;
     }
 
+    public String getAudio() {
+        return audio;
+    }
+
+    public void setAudio(String audio) {
+        this.audio = audio;
+    }
 }
