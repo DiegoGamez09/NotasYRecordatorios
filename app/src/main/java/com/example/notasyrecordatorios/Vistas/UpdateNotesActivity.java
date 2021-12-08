@@ -11,7 +11,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,7 +45,7 @@ import java.util.Date;
 public class  UpdateNotesActivity extends AppCompatActivity {
 
     EditText titulo, descripcion;
-    Button btnEditar, btnReproducir;
+    Button btnEditar, btnReproducir, btnGrabarAudio;
     String id;
     String imagen;
     String video;
@@ -55,6 +57,8 @@ public class  UpdateNotesActivity extends AppCompatActivity {
     String rutaGlobal="";
     String rutaGlobalVideo="";
     String rutaGlobalAudio = "";
+    MediaRecorder mediaRecorder;
+    File audioFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class  UpdateNotesActivity extends AppCompatActivity {
         descripcion = findViewById(R.id.descripcion);
         btnEditar = findViewById(R.id.btnEditarTarea);
         btnReproducir = findViewById(R.id.btnReproducirAudio);
+        btnGrabarAudio = findViewById(R.id.btnGrabarAudio);
         vistaImagen=findViewById(R.id.imgImagen);
         vistaVideo=findViewById(R.id.VistaVideo);
 
@@ -137,6 +142,46 @@ public class  UpdateNotesActivity extends AppCompatActivity {
                 reproducirAudio();
             }
         });
+
+        btnGrabarAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                grabarAudio();
+            }
+        });
+    }
+
+    private void grabarAudio(){
+        String path = new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date())+".mp3";
+        audioFile = new File(
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                , path );
+        if(mediaRecorder==null){
+            //rutaGlobalAudio=Environment.getExternalStorageDirectory().getAbsolutePath()+"/grabacion.mp3";
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                rutaGlobalAudio=audioFile.getAbsolutePath();
+                mediaRecorder.setOutputFile(rutaGlobalAudio);
+                System.out.println(rutaGlobalAudio);
+                Toast.makeText(UpdateNotesActivity.this, rutaGlobalAudio, Toast.LENGTH_LONG).show();
+            }
+
+            try{
+                mediaRecorder.prepare();
+                mediaRecorder.start();
+            }catch (IOException e){
+
+            }
+            Toast.makeText(UpdateNotesActivity.this, "Grabando...", Toast.LENGTH_SHORT).show();
+        }else if(mediaRecorder !=null){
+            //mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder=null;
+            Toast.makeText(UpdateNotesActivity.this, "Grabación terminada", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void reproducirAudio(){
